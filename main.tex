@@ -14,17 +14,15 @@
 
 \title{Confidential Computing on nVIDIA Hopper GPUs: A Performance Benchmark Study}
 \author{
-  Jianwei Zhu \\
-  \texttt{jianweiz@phala.network}
-  \and
-  Hang Yin \\
-  \texttt{hangyin@phala.network}
-  \and
-  Peng Deng \\
-  \texttt{pdeng21@m.fudan.edu.cn}
-  \and
+  Jianwei Zhu,
+  Hang Yin,
+  Peng Deng$^\dagger$,
+  Aline Almeida$^\ddagger$,
   Shunfan Zhou \\
-  \texttt{shelvenzhou@phala.network}
+  Phala Network, $^\dagger$Fudan University, $^\ddagger$io.net \\
+  \texttt{\{jianweiz, hangyin, shelvenzhou\}@phala.network}, \\
+  \texttt{$^\dagger$pdeng21@m.fudan.edu.cn},
+  \texttt{$^\ddagger$aline@io.net}
 }
 
 \newcommand{\peng}[1]{\textcolor{cyan}{#1}}
@@ -35,6 +33,10 @@
 \begin{abstract}
     This report evaluates the performance impact of enabling Trusted Execution Environments (TEE) on nVIDIA Hopper GPUs for large language model (LLM) inference tasks. We benchmark the overhead introduced by TEE mode across various LLMs and token lengths, with a particular focus on the bottleneck caused by CPU-GPU data transfers via PCIe. Our results indicate that while there is minimal computational overhead within the GPU, the overall performance penalty is primarily attributable to data transfer. For the majority of typical LLM queries, the overhead remains below 7\%, with larger models and longer sequences experiencing nearly zero overhead.
 \end{abstract}
+
+\section*{Acknowledgments}
+
+We would like to express our gratitude to the io.net~\cite{ionet} and IOG Foundation~\cite{iog} for their generous grant, which made this research possible. We also extend our thanks to Engage Stack~\cite{engagestack}, the cloud service provider, for providing the necessary hardware and technical support.
 
 \section{Introduction}
 
@@ -112,10 +114,10 @@ The experiments were set up with the following hardwares, respectively.
                                            & Cores                  & 96               & 48                       \\
                                            & TEE Technology         & SEV-SNP          & TDX                      \\
         \midrule
-        \textbf{Memory}                    & Total Memory           & 314 GB           & 314 GB                   \\
+        \textbf{Memory}                    & Total Memory           & 314 GB           & 128 GB                   \\
         \midrule
         \multirow{3}{*}{\textbf{Software}} & CUDA Version           & 12.5             & 12.5                     \\
-                                           & Driver Version         & 555.42.02        & 555.42.06                \\
+                                           & Driver Version         & 555.42.06        & 555.42.06                \\
                                            & Kernel Driver Version  & 550.90.07        & 550.90.07                \\
         \bottomrule
     \end{tabular}
