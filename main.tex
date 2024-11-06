@@ -12,7 +12,7 @@
 \usepackage{multirow}
 \usepackage{subcaption}
 
-\title{Confidential Computing on nVIDIA Hopper GPUs: A Performance Benchmark Study}
+\title{Confidential Computing on NVIDIA Hopper GPUs: A Performance Benchmark Study}
 \author{
   Jianwei Zhu,
   Hang Yin,
@@ -31,7 +31,7 @@
 \maketitle
 
 \begin{abstract}
-    This report evaluates the performance impact of enabling Trusted Execution Environments (TEE) on nVIDIA Hopper GPUs for large language model (LLM) inference tasks. We benchmark the overhead introduced by TEE mode across various LLMs and token lengths, with a particular focus on the bottleneck caused by CPU-GPU data transfers via PCIe. Our results indicate that while there is minimal computational overhead within the GPU, the overall performance penalty is primarily attributable to data transfer. For the majority of typical LLM queries, the overhead remains below 7\%, with larger models and longer sequences experiencing nearly zero overhead.
+    This report evaluates the performance impact of enabling Trusted Execution Environments (TEE) on NVIDIA Hopper GPUs for large language model (LLM) inference tasks. We benchmark the overhead introduced by TEE mode across various LLMs and token lengths, with a particular focus on the bottleneck caused by CPU-GPU data transfers via PCIe. Our results indicate that while there is minimal computational overhead within the GPU, the overall performance penalty is primarily attributable to data transfer. For the majority of typical LLM queries, the overhead remains below 7\%, with larger models and longer sequences experiencing nearly zero overhead.
 \end{abstract}
 
 \section*{Acknowledgments}
@@ -40,19 +40,19 @@ We would like to express our gratitude to the io.net~\cite{ionet} and IOG Founda
 
 \section{Introduction}
 
-Trusted Execution Environments (TEEs) are increasingly important in machine learning and AI due to growing security requirements in both enterprise and decentralized applications~\cite{sabt2015trusted, matetic2018delegatee, ayoade2018decentralized}. The introduction of TEE-enabled GPUs, such as the nVIDIA H100 and H200, adds an extra layer of protection for sensitive data but may impact performance. Understanding these trade-offs, particularly for large-scale machine learning tasks, is crucial for adopting TEE in high-performance AI applications~\cite{yudha2022lite, wang2024confidential}.
+Trusted Execution Environments (TEEs) are increasingly important in machine learning and AI due to growing security requirements in both enterprise and decentralized applications~\cite{sabt2015trusted, matetic2018delegatee, ayoade2018decentralized}. The introduction of TEE-enabled GPUs, such as the NVIDIA H100 and H200, adds an extra layer of protection for sensitive data but may impact performance. Understanding these trade-offs, particularly for large-scale machine learning tasks, is crucial for adopting TEE in high-performance AI applications~\cite{yudha2022lite, wang2024confidential}.
 
-This report quantifies the performance overhead of enabling TEE on the nVIDIA Hopper architecture GPUs during LLM inference tasks, identifying where the overhead arises and under what conditions it can be minimized.
+This report quantifies the performance overhead of enabling TEE on the NVIDIA Hopper architecture GPUs during LLM inference tasks, identifying where the overhead arises and under what conditions it can be minimized.
 
 \section{Background}
 
 \subsection{Trusted Execution Environment}
 
-A TEE is a hardware-based security feature that isolates computations, preventing unauthorized access and tampering, even from the operating system or the physical hardware owner. As the core technology enabling Confidential Computing, TEEs create secure enclaves where sensitive data and code are processed with encryption, ensuring confidentiality and integrity even if the broader system is compromised~\cite{sabt2015trusted}. Traditionally implemented in CPUs, TEE technology was extended to GPUs by nVIDIA in 2023, enabling tamper-proof and confidentiality-preserving computation inside the GPU with minimal performance penalty~\cite{dhanuskodi2023creating}.
+A TEE is a hardware-based security feature that isolates computations, preventing unauthorized access and tampering, even from the operating system or the physical hardware owner. As the core technology enabling Confidential Computing, TEEs create secure enclaves where sensitive data and code are processed with encryption, ensuring confidentiality and integrity even if the broader system is compromised~\cite{sabt2015trusted}. Traditionally implemented in CPUs, TEE technology was extended to GPUs by NVIDIA in 2023, enabling tamper-proof and confidentiality-preserving computation inside the GPU with minimal performance penalty~\cite{dhanuskodi2023creating}.
 
-\subsection{nVIDIA Hopper Architecture}
+\subsection{NVIDIA Hopper Architecture}
 
-The nVIDIA Hopper architecture marks a significant milestone as the first GPU family to support TEE~\cite{nvidiacc}. In TEE mode, the GPU operates in an isolated and secure environment where data transfers between the CPU and GPU are encrypted. This is achieved through ``bounce buffers'', which protect all inputs and outputs during transit between the CPU’s encrypted memory and the GPU’s internal memory~\cite{dhanuskodi2023creating}.
+The NVIDIA Hopper architecture marks a significant milestone as the first GPU family to support TEE~\cite{nvidiacc}. In TEE mode, the GPU operates in an isolated and secure environment where data transfers between the CPU and GPU are encrypted. This is achieved through ``bounce buffers'', which protect all inputs and outputs during transit between the CPU’s encrypted memory and the GPU’s internal memory~\cite{dhanuskodi2023creating}.
 
 To maintain end-to-end security, the GPU works in conjunction with CPU TEEs, such as Intel’s TDX~\cite{TDX} or AMD’s SEV-SNP~\cite{SEV-SNP, sev2020strengthening}, securing communication channels between the GPU driver and interacting software. This setup prevents unauthorized access and ensures data integrity throughout the process.
 
@@ -60,9 +60,9 @@ The Hopper series also implement remote attestation to verify the GPU’s identi
 
 \subsection{Performance Impact}
 
-Enabling TEE on the nVIDIA Hopper GPU introduces performance overheads primarily due to additional encryption and decryption during secure data transfer~\cite{mohan2024securing}. While the GPU’s internal computation remains unaffected, the main bottleneck lies in the CPU-GPU I/O, particularly when data is exchanged via PCIe. This impact varies with the size of the data transfer. The following sections present experimental results quantifying these effects across various use cases.
+Enabling TEE on the NVIDIA Hopper GPU introduces performance overheads primarily due to additional encryption and decryption during secure data transfer~\cite{mohan2024securing}. While the GPU’s internal computation remains unaffected, the main bottleneck lies in the CPU-GPU I/O, particularly when data is exchanged via PCIe. This impact varies with the size of the data transfer. The following sections present experimental results quantifying these effects across various use cases.
 
-With the TEE-enabled nVIDIA Hopper GPU, it becomes crucial to quantify performance trade-offs during practical use cases. In the next section, we outline the methodology used to assess the performance impact of TEE during LLM inference tasks.
+With the TEE-enabled NVIDIA Hopper GPU, it becomes crucial to quantify performance trade-offs during practical use cases. In the next section, we outline the methodology used to assess the performance impact of TEE during LLM inference tasks.
 
 \section{Methodology}
 
@@ -241,7 +241,7 @@ Additionally, TEE mode has also a greater impact on TTFL and ITL in H200 compare
 \end{table}
 
 \noindent\textbf{Conclusion 5: TEE can reach typical throughput.}
-Here, we use nVIDIA H100 for the case study. Our experiments revealed that, with medium-sized inputs, the H100 GPU achieves 130 TPS for Llama-3.1-8B, while the larger Phi-3-14B model reaches approximately 6 TPS. These results demonstrate the robust performance of the H100 GPU across models of varying complexity.
+Here, we use NVIDIA H100 for the case study. Our experiments revealed that, with medium-sized inputs, the H100 GPU achieves 130 TPS for Llama-3.1-8B, while the larger Phi-3-14B model reaches approximately 6 TPS. These results demonstrate the robust performance of the H100 GPU across models of varying complexity.
 
 More detailed experimental data for H100 is shown in Figures \ref{fig:scatter-llama8b-h100}, \ref{fig:scatter-phi14b-h100}, and \ref{fig:scatter-llama70b-h100}, and for H200 in Figures \ref{fig:scatter-llama8b-h200}, \ref{fig:scatter-phi14b-h200}, and \ref{fig:scatter-llama70b-h200}.
 
